@@ -1,7 +1,11 @@
-function printMessage(msg){
-	var div = document.createElement('div');
-	div.innerHTML = msg;
-	document.getElementById('messages').appendChild(div);
+function printMessage(msg, style, el = "#messages"){
+	box = document.querySelector(el);
+	box.innerHTML = msg;
+	if(el == "#messages"){
+		box.setAttribute("class", "");
+		box.classList.add("" + style + "");
+	}
+	
 }
 
 function clearMessages(){
