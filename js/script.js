@@ -1,59 +1,106 @@
-function playGame(playerInput){
+{const playGame =  playerInput => {
 
   clearMessages();
   
-  function getMoveName(argMoveId){
-    if(argMoveId == 1){
-      return 'kamień';
-    } else if(argMoveId == 2){
-      return 'papier';
-    } else if(argMoveId == 3){
-      return 'nożyce';
-    }
+  let percent = 50; // winning percent
+  const moves = {
+    0:{
+      name: "kamień",
+      icon: "kamien.jpg",
+      win: ['2', '3'],
+      lose: [0, 1, 4]},
+    1:{
+      name: "papier",
+      icon: "paper.jpg",
+      win: ['0', '4'],
+      lose: [1, 2, 3]},
+    2:{
+      name: "nożyce",
+      icon: "scissors.jpg",
+      win: ['1', '3'],
+      lose: [0, 2, 4]},
+    3:{
+      name: "jaszczurka",
+      icon: "jaszczurka.jpg",
+      win: ['1', '4'],
+      lose: [0, 2, 3]},
+    4:{
+      name: "spock",
+      icon: "spock.jpg",
+      win: ['1', '2'],
+      lose: [0, 3, 4]},
+  };
 
-    printMessage('Nie znam ruchu o id ' + argMoveId + '.');
-    return 'nieznany ruch';
+  const calculateChance = playerInput => {
+    const posib = {};
+    const wins = moves[playerInput].win;
+    const loses = moves[playerInput].lose;
+    let winPercent = Math.round(percent/wins.length)/100;
+    let losePercent = Math.round((100-percent)/loses.length)/100;
+    
+    for(let w of wins){
+      posib[w] = winPercent;
+    }
+    for(let l of loses){
+      posib[l] = losePercent;
+    }
+    return posib;
   }
 
-  function displayResult(argComputerMove, argPlayreMove){
-    if(computerMove == 'kamień' && playerMove == 'papier') {
-      printMessage('Ty wygrywasz!');
-    } else if(computerMove == 'papier' && playerMove == 'nożyce') {
-      printMessage('Ty wygrywasz!');
-    } else if(computerMove == 'nożyce' && playerMove == 'kamień') {
-      printMessage('Ty wygrywasz!')
-    } else if(computerMove == playerMove) {
-      printMessage('Tym razem mamy remis');
-    } else if(playerMove == 'nieznany ruch') {
-      printMessage('Podano wartość spoza zakresu (1-3)')
+  const posib = calculateChance(playerInput);
+
+  const weightedPosib = posib => {
+    let i, sum=0, r=Math.random();
+    for (i in posib) {
+      sum += posib[i];
+      if (r <= sum) return i;
+    }
+  }
+  
+  const randomNumber = weightedPosib(posib);
+  
+  const displayResult = (argComputerMove, argPlayerMove) => {
+    let winer = moves[argPlayerMove];
+    let index = winer.win.indexOf(argComputerMove);
+    let move = moves[argComputerMove];
+    
+    printMessage("<img src='images/" + move.icon + "' alt='" + move.name + "'>", "", "#computerBox");
+    
+    if(argComputerMove == argPlayerMove){
+      printMessage("Remis", "deuce");
+      scores[2]++;
     } else {
-      printMessage('Niestety przegrywasz :(');
+      if(index < 0){
+        printMessage("Przegrywasz", "lose");
+        printMessage(++scores[1], "lose", "#lose");
+      } else {
+          printMessage("Wygrywasz", "win");
+          printMessage(++scores[0], "win", "#win");
+      }
     }
   }
-
-  let randomNumber = Math.floor(Math.random() * 3 + 1);
-
-  console.log('Wylosowana liczba to: ' + randomNumber);
-
-  let computerMove = getMoveName(randomNumber);
-
-  console.log('Gracz wpisał: ' + playerInput);
-
-  let playerMove = getMoveName(playerInput);
-
-  printMessage('Mój ruch to: ' + computerMove);
-  printMessage('Twój ruch to: ' + playerMove);
-  displayResult(computerMove, playerMove);
+  displayResult(randomNumber, playerInput);
 }
 
-document.getElementById('play-rock').addEventListener('click', function(){
-  playGame(1);
-});
+let buttons = document.querySelectorAll('.btn');
+for(let button of buttons){
+  button.addEventListener('click', () => {
+    buttons.forEach(el => {el.classList.remove("active")});
+    button.classList.add("active");
+    playGame(button.value);
+  })
+}
 
-document.getElementById('play-paper').addEventListener('click', function(){
-  playGame(2);
-});
+const scores = [0,0,0];
 
-document.getElementById('play-scissors').addEventListener('click', function(){
-  playGame(3);
-});
+document.getElementById("newGame").addEventListener("click", () => {
+  scores[0] = 0;
+  scores[1] = 0;
+  scores[2] = 0;
+  printMessage("<p><strong>Zagrajmy</strong><br> <span>Wybierz symbol<br> aby zacząć grę</span></p>", "", "#computerBox");
+  printMessage("Zaczynajmy","win");
+  printMessage(scores[0], "win", "#win");
+  printMessage(scores[1], "lose", "#lose");
+  buttons.forEach(el => {el.classList.remove("active")});
+})
+}
