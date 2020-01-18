@@ -3,17 +3,58 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kamień, papier, nożyce</title>
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 	<div class="container">
-		<div id="buttons">
-			<button id="play-rock">kamień</button>
-			<button id="play-paper">papier</button>
-			<button id="play-scissors">nożyce</button>
-		</div>
-		<div id="messages"></div>
 	</div>
+	<!-- NEW CODE -->
+	<div class="container">
+		<div class="row">
+			<div class="col-3 colWithPad">
+				<button class="btn" value="3">
+					<img src="images/jaszczurka.jpg" alt="">
+					<p class="description">Jaszczurka</p>
+				</button>
+				<button class="btn" value="1">
+					<img src="images/paper.jpg" alt="">
+					<p class="description">Papier</p>
+				</button>
+			</div>
+			<div class="col-3">
+				<div class="box">
+					<img src="images/computer.gif" alt="Computer">
+					<div id="computerBox" class="computerBox">
+						<p><strong>Zagrajmy</strong><br> <span>Wybierz symbol<br> aby zacząć grę</span></p>
+					</div>
+				</div>
+				<div class="results">
+					<div id="messages">&nbsp;</div>
+					<p class="summary">
+						<span id="win" class="win">0</span> : 
+						<span id="lose" class="lose">0</span>
+					</p>
+					<button id="newGame" class="btn-primary">Nowa gra</button>
+				</div>
+				<button class="btn" value="2">
+					<img src="images/scissors.jpg" alt="">
+					<p class="description">Nożyce</p>
+				</button>
+			</div>
+			<div class="col-3 colWithPad">
+				<button class="btn" value="0">
+					<img src="images/kamien.jpg" alt="">
+					<p class="description">Kamień</p>
+				</button>
+				<button class="btn" value="4">
+					<img src="images/spock.jpg" alt="">
+					<p class="description">Spock</p>
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- NEW CODE -->
 	<script src="js/functions.js"></script>
 	<script src="js/script.js"></script>
 </body>
